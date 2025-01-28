@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/screens/new_task.dart';
 import 'package:todo_list/screens/tasks.dart';
 
 import 'data.dart';
@@ -9,7 +10,6 @@ class TodoList extends StatefulWidget {
   @override
   State<TodoList> createState() => _TodoListState();
 }
-
 
 class _TodoListState extends State<TodoList> {
   var userTasks = tasks;
@@ -26,21 +26,42 @@ class _TodoListState extends State<TodoList> {
     });
   }
 
+  void addTask(Task newTask) {
+    setState(() {
+      userTasks.add(newTask);
+    });
+  }
+
+  void openAddTaskSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Wrap(children: [
+        NewTask(
+          onTaskCreated: addTask,
+        ),
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: TaskListScreen(
-          tasks: userTasks,
-          onComplete: completeTask,
-          onCancel: cancelTask,
+    return Scaffold(
+      body: TaskListScreen(
+        tasks: userTasks,
+        onComplete: completeTask,
+        onCancel: cancelTask,
+      ),
+      appBar: AppBar(
+        title: Text(
+          "To-Do list",
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
-        appBar: AppBar(
-          title: Text("To-Do list"),
-          actions: [
-            IconButton(onPressed: () => {}, icon: Icon(Icons.add))
-          ],
-        ),
+        actions: [
+          IconButton(
+            onPressed: openAddTaskSheet,
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
     );
   }
