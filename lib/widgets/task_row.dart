@@ -18,19 +18,20 @@ class TaskRow extends StatelessWidget {
     var onCompleteIcon =
         task.done ? Icons.check_box_outlined : Icons.check_box_outline_blank;
 
-    Color activeColor = Colors.deepPurple;
+    Color activeColor = Theme.of(context).colorScheme.primary;
     var textTheme = Theme.of(context).textTheme.bodyLarge!.copyWith(
       fontWeight: FontWeight.bold,
       color: activeColor,
-      fontSize: 20,
     );
 
+    // текст становится серым и выводится перечеркнутым, это, кажется, ближайший
+    // "серый" читаемый цвет из тем, чтобы не было "захардкожено"
+    // жирность и перечеркнутость можно захардкодить
     if (task.done) {
-      activeColor = Colors.grey.shade900;
+      activeColor = Theme.of(context).colorScheme.secondary;
       textTheme = Theme.of(context).textTheme.bodyLarge!.copyWith(
         fontWeight: FontWeight.bold,
         color: activeColor,
-        fontSize: 20,
         decoration: TextDecoration.lineThrough,
       );
     }
