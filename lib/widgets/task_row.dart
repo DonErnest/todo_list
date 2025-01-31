@@ -19,21 +19,26 @@ class TaskRow extends StatelessWidget {
         task.done ? Icons.check_box_outlined : Icons.check_box_outline_blank;
 
     Color activeColor = Theme.of(context).colorScheme.primary;
-    var textTheme = Theme.of(context).textTheme.bodyLarge!.copyWith(
-      fontWeight: FontWeight.bold,
-      color: activeColor,
-    );
-
+    var textTheme = Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          color: activeColor,
+        );
+    Color dateColor = Theme.of(context).colorScheme.onSecondaryContainer;
     // текст становится серым и выводится перечеркнутым, это, кажется, ближайший
     // "серый" читаемый цвет из тем, чтобы не было "захардкожено"
     // жирность и перечеркнутость можно захардкодить
     if (task.done) {
       activeColor = Theme.of(context).colorScheme.secondary;
-      textTheme = Theme.of(context).textTheme.bodyLarge!.copyWith(
-        fontWeight: FontWeight.bold,
-        color: activeColor,
-        decoration: TextDecoration.lineThrough,
-      );
+      textTheme = Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: activeColor,
+            decoration: TextDecoration.lineThrough,
+          );
+      if (task.deadLine.isAfter(task.completedOn!)) {
+        dateColor = Colors.green;
+      } else {
+        dateColor = Theme.of(context).colorScheme.error;
+      }
     }
 
     return Padding(
@@ -44,25 +49,41 @@ class TaskRow extends StatelessWidget {
           border: Border.all(color: activeColor),
           borderRadius: BorderRadius.circular(10),
         ),
-
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            Text(
-              task.description.length > 20
-                  ? task.description.substring(0, 20) + "..."
-                  : task.description,
-              style: textTheme,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  task.description.length > 20
+                      ? task.description.substring(0, 20) + "..."
+                      : task.description,
+                  style: textTheme,
+                ),
+                Spacer(),
+                ElevatedButton(
+                  child: Icon(
+                    onCompleteIcon,
+                    color: activeColor,
+                  ),
+                  onPressed: () => {onComplete(task)},
+                ),
+                ElevatedButton(
+                  child: Icon(Icons.delete, color: activeColor),
+                  onPressed: () => {onCancel(task)},
+                ),
+              ],
             ),
-            Spacer(),
-            ElevatedButton(
-              child: Icon(onCompleteIcon, color: activeColor,),
-              onPressed: () => {onComplete(task)},
-            ),
-            ElevatedButton(
-              child: Icon(Icons.delete, color: activeColor),
-              onPressed: () => {onCancel(task)},
-            ),
+            Row(
+              children: [
+                Text(
+                  "До: ${formatDateTime(task.deadLine)}",
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: dateColor,
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
