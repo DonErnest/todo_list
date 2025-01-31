@@ -17,6 +17,11 @@ class _TodoListState extends State<TodoList> {
   void completeTask(Task task) {
     setState(() {
       task.done = !task.done;
+      if (task.completedOn != null) {
+        task.completedOn = null;
+      } else {
+        task.completedOn = DateTime.now();
+      }
     });
   }
 
