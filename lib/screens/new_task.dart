@@ -12,6 +12,20 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   var taskDescription = "";
+  
+  var selectedDate = DateTime.now().add(Duration(minutes: 30));
+  final deadLineDateController = TextEditingController();
+
+  var selectedTimeOfDay = TimeOfDay.now();
+  final deadLineTimeController = TextEditingController();
+  
+  @override
+  void initState() {
+    super.initState();
+    deadLineDateController.text = formatDate(selectedDate);
+    deadLineTimeController.text = formatTime(selectedTimeOfDay);
+  }
+
 
   void onCanceled() {
     Navigator.pop(context);
@@ -19,10 +33,52 @@ class _NewTaskState extends State<NewTask> {
 
   void onSaved() {
     setState(() {
-      final task = Task(description: taskDescription);
+      final dateTime = DateTime(
+        selectedDate.year,
+        selectedDate.month,
+        selectedDate.day,
+        selectedTimeOfDay.hour,
+        selectedTimeOfDay.minute,
+      );
+      final task = Task(description: taskDescription, deadLine: dateTime);
       widget.onTaskCreated(task);
       Navigator.pop(context);
     });
+  }
+
+  void onDateTap() async {
+    final now = DateTime.now();
+    final firstDate = DateTime.now().add(Duration(minutes: 30));
+    // it's better not to plan task for more than 2 week sprint
+    final lastDate = DateTime(now.year, now.month, now.day + 14);
+
+    final dateFromUser = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (dateFromUser != null) {
+      setState(() {
+        selectedDate = dateFromUser;
+        deadLineDateController.text = formatDate(dateFromUser);
+      });
+    }
+  }
+
+  void onTimeTap() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTimeOfDay,
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        selectedTimeOfDay = pickedTime;
+        deadLineTimeController.text = formatTime(pickedTime);
+      });
+    }
   }
 
   @override
@@ -38,6 +94,32 @@ class _NewTaskState extends State<NewTask> {
             decoration: const InputDecoration(
               label: Text("enter task description"),
             ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  onTap: onDateTap,
+                  readOnly: true,
+                  controller: deadLineDateController,
+                  decoration: InputDecoration(
+                    label: Text('Date'),
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              SizedBox(
+                width: 100,
+                child: TextField(
+                  onTap: onTimeTap,
+                  readOnly: true,
+                  controller: deadLineTimeController,
+                  decoration: InputDecoration(
+                    label: Text('Time'),
+                  ),
+                ),
+              ),
+            ],
           ),
           Row(
             children: [
