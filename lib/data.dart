@@ -56,4 +56,8 @@ List<Task> tasks = [
     description: "подумать",
     deadLine: DateTime.now().add(Duration(hours: 1)),
   ),
+  Task(
+    description: "подготовиться к зиме",
+    deadLine: DateTime.now().subtract(Duration(days: 70)),
+  ),
 ];

@@ -13,7 +13,7 @@ class NewTask extends StatefulWidget {
 class _NewTaskState extends State<NewTask> {
   var taskDescription = "";
   
-  var selectedDate = DateTime.now().add(Duration(minutes: 30));
+  var selectedDate = DateTime.now();
   final deadLineDateController = TextEditingController();
 
   var selectedTimeOfDay = TimeOfDay.now();
@@ -48,14 +48,13 @@ class _NewTaskState extends State<NewTask> {
 
   void onDateTap() async {
     final now = DateTime.now();
-    final firstDate = DateTime.now().add(Duration(minutes: 30));
     // it's better not to plan task for more than 2 week sprint
     final lastDate = DateTime(now.year, now.month, now.day + 14);
 
     final dateFromUser = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: firstDate,
+      firstDate: now,
       lastDate: lastDate,
     );
 
