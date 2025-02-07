@@ -12,13 +12,14 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   var taskDescription = "";
-  
+  int? selectedCategory;
+
   var selectedDate = DateTime.now();
   final deadLineDateController = TextEditingController();
 
   var selectedTimeOfDay = TimeOfDay.now();
   final deadLineTimeController = TextEditingController();
-  
+
   @override
   void initState() {
     super.initState();
@@ -26,13 +27,15 @@ class _NewTaskState extends State<NewTask> {
     deadLineTimeController.text = formatTime(selectedTimeOfDay);
   }
 
-
   void onCanceled() {
     Navigator.pop(context);
   }
 
   void onSaved() {
     setState(() {
+      if (selectedCategory == null) {
+        return;
+      }
       final dateTime = DateTime(
         selectedDate.year,
         selectedDate.month,
@@ -40,7 +43,11 @@ class _NewTaskState extends State<NewTask> {
         selectedTimeOfDay.hour,
         selectedTimeOfDay.minute,
       );
-      final task = Task(description: taskDescription, deadLine: dateTime);
+      final task = Task(
+        description: taskDescription,
+        deadLine: dateTime,
+        categoryId: selectedCategory!,
+      );
       widget.onTaskCreated(task);
       Navigator.pop(context);
     });
@@ -82,6 +89,8 @@ class _NewTaskState extends State<NewTask> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(16),
@@ -93,6 +102,23 @@ class _NewTaskState extends State<NewTask> {
             decoration: const InputDecoration(
               label: Text("enter task description"),
             ),
+          ),
+          DropdownMenu(
+            expandedInsets: EdgeInsets.zero,
+            label: Text("Category"),
+            inputDecorationTheme: theme.inputDecorationTheme,
+            dropdownMenuEntries: categories
+                .map(
+                  (category) => DropdownMenuEntry(
+                    value: category.id,
+                    label: category.name,
+                    leadingIcon: Icon(category.icon),
+                  ),
+                )
+                .toList(),
+            onSelected: (value) => setState(() {
+              selectedCategory = value;
+            }),
           ),
           Row(
             children: [
