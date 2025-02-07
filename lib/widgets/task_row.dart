@@ -50,6 +50,7 @@ class TaskRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,6 +77,8 @@ class TaskRow extends StatelessWidget {
             ),
             Row(
               children: [
+                Icon(getCategoryById(task.categoryId).icon, size: 30,),
+                SizedBox(width: 10),
                 Text(
                   "До: ${formatDateTime(task.deadLine)}",
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
