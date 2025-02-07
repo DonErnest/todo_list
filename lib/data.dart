@@ -53,6 +53,8 @@ var meetingCategory = TaskCategory(id: 2, name: "Встречи", icon: Icons.ha
 var workCategory = TaskCategory(id: 3, name: "Работа", icon: Icons.work_outline);
 var adventureCategory = TaskCategory(id: 4, name: "Приключение", icon: Icons.route);
 
+const anyCategory = "all tasks";
+
 var categories = [
   shoppingCategory,
   meetingCategory,

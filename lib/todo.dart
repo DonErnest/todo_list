@@ -13,6 +13,19 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList> {
   var userTasks = tasks;
+  final dropDownFilterController = TextEditingController();
+
+  void filterTasks(String? categoryName) {
+    if (categoryName == null || categoryName == anyCategory) {
+      return;
+    }
+    setState(() {
+      userTasks = tasks
+          .where(
+              (task) => getCategoryById(task.categoryId).name == categoryName)
+          .toList();
+    });
+  }
 
   void completeTask(Task task) {
     setState(() {
@@ -40,6 +53,8 @@ class _TodoListState extends State<TodoList> {
   void openAddTaskSheet() {
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
       builder: (ctx) => Wrap(children: [
         NewTask(
           onTaskCreated: addTask,
@@ -50,6 +65,7 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: TaskListScreen(
         tasks: userTasks,
@@ -62,6 +78,20 @@ class _TodoListState extends State<TodoList> {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         actions: [
+          DropdownMenu<String>(
+            controller: dropDownFilterController,
+            inputDecorationTheme: theme.inputDecorationTheme,
+            initialSelection: anyCategory,
+            dropdownMenuEntries: [
+                  const DropdownMenuEntry(value: anyCategory, label: "все задачи")
+                ] +
+                categories
+                    .map<DropdownMenuEntry<String>>((category) =>
+                        DropdownMenuEntry(
+                            value: category.name, label: category.name))
+                    .toList(),
+            onSelected: filterTasks,
+          ),
           IconButton(
             onPressed: openAddTaskSheet,
             icon: const Icon(Icons.add),
