@@ -15,16 +15,17 @@ class _TodoListState extends State<TodoList> {
   var userTasks = tasks;
   final dropDownFilterController = TextEditingController();
 
-  void filterTasks(String? categoryName) {
-    if (categoryName == null || categoryName == anyCategory) {
-      return;
-    }
-    setState(() {
-      userTasks = tasks
-          .where(
-              (task) => getCategoryById(task.categoryId).name == categoryName)
-          .toList();
-    });
+  void filterTasks(int? categoryId) {
+    setState(
+      () {
+        if (categoryId == null || categoryId == anyCategory) {
+          userTasks = tasks;
+        } else {
+          userTasks =
+              tasks.where((task) => task.categoryId == categoryId).toList();
+        }
+      },
+    );
   }
 
   void completeTask(Task task) {
@@ -78,17 +79,18 @@ class _TodoListState extends State<TodoList> {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         actions: [
-          DropdownMenu<String>(
+          DropdownMenu<int>(
             controller: dropDownFilterController,
             inputDecorationTheme: theme.inputDecorationTheme,
-            initialSelection: anyCategory,
+            initialSelection: 0,
             dropdownMenuEntries: [
-                  const DropdownMenuEntry(value: anyCategory, label: "все задачи")
+                  const DropdownMenuEntry(
+                      value: 0, label: "Все задачи")
                 ] +
                 categories
-                    .map<DropdownMenuEntry<String>>((category) =>
+                    .map<DropdownMenuEntry<int>>((category) =>
                         DropdownMenuEntry(
-                            value: category.name, label: category.name))
+                            value: category.id, label: category.name))
                     .toList(),
             onSelected: filterTasks,
           ),
