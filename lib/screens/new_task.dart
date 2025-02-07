@@ -88,75 +88,85 @@ class _NewTaskState extends State<NewTask> {
   }
 
   @override
+  void dispose() {
+    deadLineTimeController.dispose();
+    deadLineDateController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          TextField(
-            onChanged: (value) => setState(() => taskDescription = value),
-            maxLines: 1,
-            decoration: const InputDecoration(
-              label: Text("enter task description"),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, bottomInset + 16),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) => setState(() => taskDescription = value),
+              maxLines: 1,
+              decoration: const InputDecoration(
+                label: Text("enter task description"),
+              ),
             ),
-          ),
-          DropdownMenu(
-            expandedInsets: EdgeInsets.zero,
-            label: Text("Category"),
-            inputDecorationTheme: theme.inputDecorationTheme,
-            dropdownMenuEntries: categories
-                .map(
-                  (category) => DropdownMenuEntry(
-                    value: category.id,
-                    label: category.name,
-                    leadingIcon: Icon(category.icon),
-                  ),
-                )
-                .toList(),
-            onSelected: (value) => setState(() {
-              selectedCategory = value;
-            }),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  onTap: onDateTap,
-                  readOnly: true,
-                  controller: deadLineDateController,
-                  decoration: InputDecoration(
-                    label: Text('Date'),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              SizedBox(
-                width: 100,
-                child: TextField(
-                  onTap: onTimeTap,
-                  readOnly: true,
-                  controller: deadLineTimeController,
-                  decoration: InputDecoration(
-                    label: Text('Time'),
+            DropdownMenu(
+              expandedInsets: EdgeInsets.zero,
+              label: Text("Category"),
+              inputDecorationTheme: theme.inputDecorationTheme,
+              dropdownMenuEntries: categories
+                  .map(
+                    (category) => DropdownMenuEntry(
+                      value: category.id,
+                      label: category.name,
+                      leadingIcon: Icon(category.icon),
+                    ),
+                  )
+                  .toList(),
+              onSelected: (value) => setState(() {
+                selectedCategory = value;
+              }),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onTap: onDateTap,
+                    readOnly: true,
+                    controller: deadLineDateController,
+                    decoration: InputDecoration(
+                      label: Text('Date'),
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              TextButton(onPressed: onCanceled, child: Text('Cancel')),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: onSaved,
-                child: const Text("Save"),
-              ),
-            ],
-          ),
-        ],
+                SizedBox(width: 16),
+                SizedBox(
+                  width: 100,
+                  child: TextField(
+                    onTap: onTimeTap,
+                    readOnly: true,
+                    controller: deadLineTimeController,
+                    decoration: InputDecoration(
+                      label: Text('Time'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                TextButton(onPressed: onCanceled, child: Text('Cancel')),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: onSaved,
+                  child: const Text("Save"),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
