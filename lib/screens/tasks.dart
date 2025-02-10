@@ -32,9 +32,14 @@ class TaskListScreen extends StatelessWidget {
     }
 
     return DecoratedContainer(
-      widget: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: rows,
+      widget: ListView.builder(
+        itemBuilder: (ctx, idx) => TaskRow(
+          task: tasks[idx],
+          onCancel: onCancel,
+          onComplete: onComplete,
+          onEdit: onEdit,
+        ),
+        itemCount: tasks.length,
       ),
     );
   }

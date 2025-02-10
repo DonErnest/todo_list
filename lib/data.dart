@@ -26,9 +26,7 @@ class Task {
     required this.categoryId,
     this.done = false,
     required this.deadLine,
-  }){
-    id = id ?? uuid.v4();
-  }
+  }):  id = id ?? uuid.v4();
 }
 
 String _zeroPad(int dateTimeValue) {
@@ -108,5 +106,25 @@ List<Task> tasks = [
     description: "подготовиться к зиме",
     categoryId: meetingCategory.id,
     deadLine: DateTime.now().subtract(Duration(days: 70)),
+  ),
+  Task(
+    description: "отмыть Бишкек",
+    categoryId: adventureCategory.id,
+    deadLine: DateTime.now().add(Duration(days: 3560)),
+  ),
+  Task(
+    description: "свести счеты с Дедом Морозом",
+    categoryId: meetingCategory.id,
+    deadLine: DateTime.now().add(Duration(days: 365)),
+  ),
+  Task(
+    description: "купить подарок на 8 марта",
+    deadLine: DateTime(2025, 3, 8, 9, 0, 0),
+    categoryId: shoppingCategory.id
+  ),
+  Task(
+      description: "стать синьором",
+      deadLine: DateTime.now().add(Duration(days: 100)),
+      categoryId: workCategory.id
   ),
 ];

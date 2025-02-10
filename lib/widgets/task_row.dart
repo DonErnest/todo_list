@@ -79,8 +79,8 @@ class TaskRow extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    task.description.length > 20
-                        ? task.description.substring(0, 20) + "..."
+                    task.description.length > 15
+                        ? task.description.substring(0, 15) + "..."
                         : task.description,
                     style: textTheme,
                   ),
