@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/screens/new_task.dart';
+import 'package:todo_list/screens/task_form.dart';
 import 'package:todo_list/screens/tasks.dart';
 
 import 'data.dart';
@@ -51,16 +51,36 @@ class _TodoListState extends State<TodoList> {
     });
   }
 
+  void editTask(Task editedTask) {
+    setState(() {
+      final idx = userTasks.indexWhere((task) => task.id == editedTask.id);
+      userTasks[idx] = editedTask;
+    });
+  }
+
   void openAddTaskSheet() {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
       isScrollControlled: true,
       builder: (ctx) => Wrap(children: [
-        NewTask(
+        TaskForm(
           onTaskCreated: addTask,
+          existingTask: null,
         ),
       ]),
+    );
+  }
+
+  void openEditTaskSheet(String id) {
+    final existingTask = userTasks.firstWhere((task) => task.id == id);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => TaskForm(
+        onTaskCreated: editTask,
+        existingTask: existingTask,
+      ),
     );
   }
 
@@ -72,6 +92,7 @@ class _TodoListState extends State<TodoList> {
         tasks: userTasks,
         onComplete: completeTask,
         onCancel: cancelTask,
+        onEdit: openEditTaskSheet,
       ),
       appBar: AppBar(
         title: Text(
@@ -84,8 +105,7 @@ class _TodoListState extends State<TodoList> {
             inputDecorationTheme: theme.inputDecorationTheme,
             initialSelection: 0,
             dropdownMenuEntries: [
-                  const DropdownMenuEntry(
-                      value: 0, label: "Все задачи")
+                  const DropdownMenuEntry(value: 0, label: "Все задачи")
                 ] +
                 categories
                     .map<DropdownMenuEntry<int>>((category) =>

@@ -7,12 +7,14 @@ class TaskListScreen extends StatelessWidget {
   final List<Task> tasks;
   final void Function(Task task) onComplete;
   final void Function(Task task) onCancel;
+  final void Function(String id) onEdit;
 
   const TaskListScreen({
     super.key,
     required this.tasks,
     required this.onComplete,
     required this.onCancel,
+    required this.onEdit,
   });
 
   @override
@@ -24,6 +26,7 @@ class TaskListScreen extends StatelessWidget {
           task: task,
           onCancel: onCancel,
           onComplete: onComplete,
+          onEdit: onEdit,
         ),
       );
     }
