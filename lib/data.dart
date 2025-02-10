@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
 
 class TaskCategory {
   final int id;
@@ -8,14 +10,25 @@ class TaskCategory {
   TaskCategory({required this.id, required this.name, required this.icon});
 }
 
+const uuid = Uuid();
+
 class Task {
+  late final String id;
   final String description;
   final int categoryId;
   bool done;
   DateTime deadLine;
   DateTime? completedOn;
 
-  Task( {required this.description, required this.categoryId, this.done = false, required this.deadLine});
+  Task({
+    String? id,
+    required this.description,
+    required this.categoryId,
+    this.done = false,
+    required this.deadLine,
+  }){
+    id = id ?? uuid.v4();
+  }
 }
 
 String _zeroPad(int dateTimeValue) {
@@ -48,10 +61,14 @@ String formatTime(TimeOfDay dateTime) {
   return '$hour:$minute';
 }
 
-var shoppingCategory = TaskCategory(id:1, name: "Покупки", icon: Icons.shopping_bag);
-var meetingCategory = TaskCategory(id: 2, name: "Встречи", icon: Icons.handshake_outlined);
-var workCategory = TaskCategory(id: 3, name: "Работа", icon: Icons.work_outline);
-var adventureCategory = TaskCategory(id: 4, name: "Приключение", icon: Icons.route);
+var shoppingCategory =
+    TaskCategory(id: 1, name: "Покупки", icon: Icons.shopping_bag);
+var meetingCategory =
+    TaskCategory(id: 2, name: "Встречи", icon: Icons.handshake_outlined);
+var workCategory =
+    TaskCategory(id: 3, name: "Работа", icon: Icons.work_outline);
+var adventureCategory =
+    TaskCategory(id: 4, name: "Приключение", icon: Icons.route);
 
 const anyCategory = 0;
 
