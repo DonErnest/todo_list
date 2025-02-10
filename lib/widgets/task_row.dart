@@ -64,58 +64,51 @@ class TaskRow extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
-      child: GestureDetector(
-        onTap: () => onEdit(task.id),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: activeColor),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    task.description.length > 15
-                        ? task.description.substring(0, 15) + "..."
-                        : task.description,
-                    style: textTheme,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: activeColor),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  task.description.length > 15
+                      ? task.description.substring(0, 15) + "..."
+                      : task.description,
+                  style: textTheme,
+                ),
+                Spacer(),
+                ElevatedButton(
+                  child: Icon(
+                    onCompleteIcon,
+                    color: activeColor,
                   ),
-                  Spacer(),
-                  ElevatedButton(
-                    child: Icon(
-                      onCompleteIcon,
-                      color: activeColor,
-                    ),
-                    onPressed: () => {onComplete(task)},
+                  onPressed: () => {onComplete(task)},
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Icon(getCategoryById(task.categoryId).icon, size: 30,),
+                SizedBox(width: 10),
+                Text(
+                  "До: ${formatDateTime(task.deadLine)}",
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(
+                    color: dateColor,
                   ),
-                  ElevatedButton(
-                    child: Icon(Icons.delete, color: activeColor),
-                    onPressed: () => {onCancel(task)},
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(getCategoryById(task.categoryId).icon, size: 30,),
-                  SizedBox(width: 10),
-                  Text(
-                    "До: ${formatDateTime(task.deadLine)}",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(
-                      color: dateColor,
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
