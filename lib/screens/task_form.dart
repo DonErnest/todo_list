@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/data.dart';
 
-class NewTask extends StatefulWidget {
+class TaskForm extends StatefulWidget {
   final void Function(Task newTask) onTaskCreated;
+  final Task? existingTask;
 
-  const NewTask({super.key, required this.onTaskCreated});
+
+  const TaskForm({super.key, required this.onTaskCreated, required this.existingTask});
 
   @override
-  State<NewTask> createState() => _NewTaskState();
+  State<TaskForm> createState() => _TaskFormState();
 }
 
-class _NewTaskState extends State<NewTask> {
+class _TaskFormState extends State<TaskForm> {
   var taskDescription = "";
+  final descriptionController = TextEditingController();
+
   int? selectedCategory;
+  final categoryController = TextEditingController();
 
   var selectedDate = DateTime.now();
   final deadLineDateController = TextEditingController();
@@ -20,9 +25,19 @@ class _NewTaskState extends State<NewTask> {
   var selectedTimeOfDay = TimeOfDay.now();
   final deadLineTimeController = TextEditingController();
 
+
   @override
   void initState() {
     super.initState();
+
+    if (widget.existingTask != null) {
+      final existingTask = widget.existingTask!;
+      descriptionController.text = existingTask.description;
+      selectedDate = existingTask.deadLine;
+      selectedTimeOfDay = TimeOfDay.fromDateTime(selectedDate);
+      selectedCategory = existingTask.categoryId;
+    }
+
     deadLineDateController.text = formatDate(selectedDate);
     deadLineTimeController.text = formatTime(selectedTimeOfDay);
   }
@@ -44,7 +59,8 @@ class _NewTaskState extends State<NewTask> {
         selectedTimeOfDay.minute,
       );
       final task = Task(
-        description: taskDescription,
+        id: widget.existingTask?.id,
+        description: descriptionController.text.trim(),
         deadLine: dateTime,
         categoryId: selectedCategory!,
       );
@@ -89,6 +105,8 @@ class _NewTaskState extends State<NewTask> {
 
   @override
   void dispose() {
+    descriptionController.dispose();
+    categoryController.dispose();
     deadLineTimeController.dispose();
     deadLineDateController.dispose();
     super.dispose();
@@ -106,6 +124,7 @@ class _NewTaskState extends State<NewTask> {
         child: Column(
           children: [
             TextField(
+              controller: descriptionController,
               onChanged: (value) => setState(() => taskDescription = value),
               maxLines: 1,
               decoration: const InputDecoration(
@@ -128,6 +147,8 @@ class _NewTaskState extends State<NewTask> {
               onSelected: (value) => setState(() {
                 selectedCategory = value;
               }),
+              controller: categoryController,
+              initialSelection: selectedCategory,
             ),
             Row(
               children: [
