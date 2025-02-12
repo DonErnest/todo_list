@@ -17,15 +17,15 @@ class Task {
   final String description;
   final int categoryId;
   bool done;
-  DateTime deadLine;
+  DateTime? deadLine;
   DateTime? completedOn;
 
   Task({
     String? id,
     required this.description,
     required this.categoryId,
+    this.deadLine,
     this.done = false,
-    required this.deadLine,
   }):  id = id ?? uuid.v4();
 }
 
@@ -90,12 +90,10 @@ List<Task> tasks = [
   Task(
     description: "захватить мир",
     categoryId: adventureCategory.id,
-    deadLine: DateTime.now().subtract(Duration(days: 1)),
   ),
   Task(
     description: "найти смысл жизни",
     categoryId: adventureCategory.id,
-    deadLine: DateTime.now().add(Duration(days: 15000)),
   ),
   Task(
     description: "подумать",
@@ -124,7 +122,6 @@ List<Task> tasks = [
   ),
   Task(
       description: "стать синьором",
-      deadLine: DateTime.now().add(Duration(days: 100)),
       categoryId: workCategory.id
   ),
 ];

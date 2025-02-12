@@ -19,10 +19,10 @@ class _TaskFormState extends State<TaskForm> {
   int? selectedCategory;
   final categoryController = TextEditingController();
 
-  var selectedDate = DateTime.now();
+  DateTime? selectedDate;
   final deadLineDateController = TextEditingController();
 
-  var selectedTimeOfDay = TimeOfDay.now();
+  TimeOfDay? selectedTimeOfDay;
   final deadLineTimeController = TextEditingController();
 
 
@@ -34,12 +34,15 @@ class _TaskFormState extends State<TaskForm> {
       final existingTask = widget.existingTask!;
       descriptionController.text = existingTask.description;
       selectedDate = existingTask.deadLine;
-      selectedTimeOfDay = TimeOfDay.fromDateTime(selectedDate);
+      if (selectedDate != null) {
+        selectedTimeOfDay = TimeOfDay.fromDateTime(selectedDate!);
+      }
       selectedCategory = existingTask.categoryId;
     }
-
-    deadLineDateController.text = formatDate(selectedDate);
-    deadLineTimeController.text = formatTime(selectedTimeOfDay);
+    if (selectedDate != null) {
+      deadLineDateController.text = formatDate(selectedDate!);
+      deadLineTimeController.text = formatTime(selectedTimeOfDay!);
+    }
   }
 
   void onCanceled() {
@@ -51,13 +54,17 @@ class _TaskFormState extends State<TaskForm> {
       if (selectedCategory == null) {
         return;
       }
-      final dateTime = DateTime(
-        selectedDate.year,
-        selectedDate.month,
-        selectedDate.day,
-        selectedTimeOfDay.hour,
-        selectedTimeOfDay.minute,
-      );
+      DateTime? dateTime;
+      if (selectedDate != null && selectedTimeOfDay != null) {
+        dateTime = DateTime(
+          selectedDate!.year,
+          selectedDate!.month,
+          selectedDate!.day,
+          selectedTimeOfDay!.hour,
+          selectedTimeOfDay!.minute,
+        );
+      }
+
       final task = Task(
         id: widget.existingTask?.id,
         description: descriptionController.text.trim(),
@@ -92,7 +99,7 @@ class _TaskFormState extends State<TaskForm> {
   void onTimeTap() async {
     final pickedTime = await showTimePicker(
       context: context,
-      initialTime: selectedTimeOfDay,
+      initialTime: selectedTimeOfDay != null? selectedTimeOfDay! : TimeOfDay.now(),
     );
 
     if (pickedTime != null) {

@@ -52,7 +52,7 @@ class TaskRow extends StatelessWidget {
         color: activeColor,
         decoration: TextDecoration.lineThrough,
       );
-      if (task.deadLine.isAfter(task.completedOn!)) {
+      if (task.deadLine != null && task.deadLine!.isAfter(task.completedOn!)) {
         dateColor = Colors.green;
       } else {
         dateColor = Theme
@@ -97,7 +97,7 @@ class TaskRow extends StatelessWidget {
                 Icon(getCategoryById(task.categoryId).icon, size: 30,),
                 SizedBox(width: 10),
                 Text(
-                  "До: ${formatDateTime(task.deadLine)}",
+                  "До: ${task.deadLine != null? formatDateTime(task.deadLine!): "ишачьей пасхи"}",
                   style: Theme
                       .of(context)
                       .textTheme
