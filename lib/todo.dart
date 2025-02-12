@@ -86,6 +86,12 @@ class _TodoListState extends State<TodoList> {
 
   @override
   Widget build(BuildContext context) {
+    userTasks.sort((a, b) {
+      if (a.deadLine != null && b.deadLine == null) {
+        return -1;
+      }
+      return a.description.compareTo(b.description);
+    });
     final theme = Theme.of(context);
     return Scaffold(
       body: TaskListScreen(
