@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/screens/task_form.dart';
 import 'package:todo_list/screens/tasks.dart';
+import 'package:todo_list/screens/tasks_statistics.dart';
 
 import 'data.dart';
+import 'models/destination.dart';
 
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
@@ -14,6 +16,7 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   var userTasks = tasks;
   final dropDownFilterController = TextEditingController();
+  int currentScreenIndex = 0;
 
   void filterTasks(int? categoryId) {
     setState(
@@ -84,8 +87,52 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
+  void updateCurrentPageIndex(int newIndex) {
+    setState(() {
+      currentScreenIndex = newIndex;
+    });
+  }
+
+  List<Destination> get destinations {
+    return [
+      Destination(
+        screenTitle: Text(
+          'To-Do list',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        navLabel: 'To-Do list',
+        icon: Icons.receipt_long_outlined,
+        selectedIcon: Icons.receipt_long,
+        appBarActions: [
+          IconButton(
+            onPressed: openAddTaskSheet,
+            icon: Icon(Icons.add),
+          ),
+        ],
+        screen: TaskListScreen(
+          tasks: userTasks,
+          onCancel: cancelTask,
+          onEdit: openEditTaskSheet,
+          onComplete: completeTask,
+        ),
+      ),
+      Destination(
+        screenTitle: Text(
+          'Статистика',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        navLabel: 'Статистика',
+        icon: Icons.pie_chart_outline,
+        selectedIcon: Icons.pie_chart,
+        screen: TasksStatisticsScreen(),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final destination = destinations[currentScreenIndex];
+
     userTasks.sort((a, b) {
       if (a.deadLine != null && b.deadLine == null) {
         return -1;
@@ -94,37 +141,21 @@ class _TodoListState extends State<TodoList> {
     });
     final theme = Theme.of(context);
     return Scaffold(
-      body: TaskListScreen(
-        tasks: userTasks,
-        onComplete: completeTask,
-        onCancel: cancelTask,
-        onEdit: openEditTaskSheet,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentScreenIndex,
+        onDestinationSelected: updateCurrentPageIndex,
+        destinations: destinations
+            .map((destination) => NavigationDestination(
+                  icon: Icon(destination.icon),
+                  selectedIcon: Icon(destination.selectedIcon),
+                  label: destination.navLabel,
+                ))
+            .toList(),
       ),
+      body: destination.screen,
       appBar: AppBar(
-        title: Text(
-          "To-Do list",
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
-        actions: [
-          DropdownMenu<int>(
-            controller: dropDownFilterController,
-            inputDecorationTheme: theme.inputDecorationTheme,
-            initialSelection: 0,
-            dropdownMenuEntries: [
-                  const DropdownMenuEntry(value: 0, label: "Все задачи")
-                ] +
-                categories
-                    .map<DropdownMenuEntry<int>>((category) =>
-                        DropdownMenuEntry(
-                            value: category.id, label: category.name))
-                    .toList(),
-            onSelected: filterTasks,
-          ),
-          IconButton(
-            onPressed: openAddTaskSheet,
-            icon: const Icon(Icons.add),
-          )
-        ],
+        title: destination.screenTitle,
+        actions: destination.appBarActions,
       ),
     );
   }
