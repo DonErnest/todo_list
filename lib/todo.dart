@@ -3,7 +3,7 @@ import 'package:todo_list/screens/task_form.dart';
 import 'package:todo_list/screens/tasks.dart';
 import 'package:todo_list/screens/tasks_statistics.dart';
 
-import 'data.dart';
+import 'models/task.dart';
 import 'models/destination.dart';
 
 class TodoList extends StatefulWidget {
@@ -124,7 +124,9 @@ class _TodoListState extends State<TodoList> {
         navLabel: 'Статистика',
         icon: Icons.pie_chart_outline,
         selectedIcon: Icons.pie_chart,
-        screen: TasksStatisticsScreen(),
+        screen: TasksStatisticsScreen(
+          userTasks: userTasks,
+        ),
       ),
     ];
   }
