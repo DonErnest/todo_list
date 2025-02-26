@@ -19,13 +19,14 @@ class Task {
   DateTime? deadLine;
   DateTime? completedOn;
 
-  Task({
-    String? id,
-    required this.description,
-    required this.categoryId,
-    this.deadLine,
-    this.done = false,
-  }) : id = id ?? uuid.v4();
+  Task(
+      {String? id,
+      required this.description,
+      required this.categoryId,
+      this.deadLine,
+      this.done = false,
+      this.completedOn})
+      : id = id ?? uuid.v4();
 }
 
 int getCompletedCountByWeekDay(int weekDay, List<Task> tasks) {
@@ -63,10 +64,11 @@ TaskCategory getCategoryById(int id) {
 
 List<Task> tasks = [
   Task(
-    description: "купить молоко",
-    categoryId: shoppingCategory.id,
-    deadLine: DateTime.now().add(Duration(days: 1)),
-  ),
+      description: "купить молоко",
+      categoryId: shoppingCategory.id,
+      deadLine: DateTime.now().add(Duration(days: 2)),
+      done: true,
+      completedOn: DateTime.now().add(Duration(days: 3))),
   Task(
     description: "захватить мир",
     categoryId: adventureCategory.id,
@@ -81,10 +83,17 @@ List<Task> tasks = [
     deadLine: DateTime.now().add(Duration(hours: 1)),
   ),
   Task(
-    description: "подготовиться к зиме",
-    categoryId: meetingCategory.id,
-    deadLine: DateTime.now().subtract(Duration(days: 70)),
-  ),
+      description: "подготовиться к зиме",
+      categoryId: meetingCategory.id,
+      deadLine: DateTime.now().subtract(Duration(days: 70)),
+      done: true,
+      completedOn: DateTime.now().add(Duration(days: 4))),
+  Task(
+      description: "купить носки",
+      categoryId: shoppingCategory.id,
+      deadLine: DateTime.now().subtract(Duration(days: 70)),
+      done: true,
+      completedOn: DateTime.now().add(Duration(days: 4))),
   Task(
     description: "отмыть Бишкек",
     categoryId: adventureCategory.id,
@@ -100,4 +109,11 @@ List<Task> tasks = [
       deadLine: DateTime(2025, 3, 8, 9, 0, 0),
       categoryId: shoppingCategory.id),
   Task(description: "стать синьором", categoryId: workCategory.id),
+  Task(
+    description: "нарядить ёлку",
+    categoryId: workCategory.id,
+    deadLine: DateTime(2024, 12, 24, 9, 0, 0),
+    done: true,
+    completedOn: DateTime(2025, 2, 1, 9, 0, 0)
+  ),
 ];

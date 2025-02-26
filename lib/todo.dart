@@ -94,6 +94,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   List<Destination> get destinations {
+    final theme = Theme.of(context);
     return [
       Destination(
         screenTitle: Text(
@@ -104,10 +105,24 @@ class _TodoListState extends State<TodoList> {
         icon: Icons.receipt_long_outlined,
         selectedIcon: Icons.receipt_long,
         appBarActions: [
+          DropdownMenu<int>(
+            controller: dropDownFilterController,
+            inputDecorationTheme: theme.inputDecorationTheme,
+            initialSelection: 0,
+            dropdownMenuEntries: [
+                  const DropdownMenuEntry(value: 0, label: "Все задачи")
+                ] +
+                categories
+                    .map<DropdownMenuEntry<int>>((category) =>
+                        DropdownMenuEntry(
+                            value: category.id, label: category.name))
+                    .toList(),
+            onSelected: filterTasks,
+          ),
           IconButton(
             onPressed: openAddTaskSheet,
-            icon: Icon(Icons.add),
-          ),
+            icon: const Icon(Icons.add),
+          )
         ],
         screen: TaskListScreen(
           tasks: userTasks,
