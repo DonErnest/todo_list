@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-
 class TaskCategory {
   final int id;
   final String name;
@@ -26,37 +25,18 @@ class Task {
     required this.categoryId,
     this.deadLine,
     this.done = false,
-  }):  id = id ?? uuid.v4();
+  }) : id = id ?? uuid.v4();
 }
 
-String _zeroPad(int dateTimeValue) {
-  if (dateTimeValue < 10) {
-    return '0$dateTimeValue';
-  }
-  return dateTimeValue.toString();
-}
-
-String formatDateTime(DateTime dateTime) {
-  final day = _zeroPad(dateTime.day);
-  final month = _zeroPad(dateTime.month);
-  final year = dateTime.year;
-  final hour = _zeroPad(dateTime.hour);
-  final minute = _zeroPad(dateTime.minute);
-  return '$day.$month.$year $hour:$minute';
-}
-
-String formatDate(DateTime dateTime) {
-  final day = _zeroPad(dateTime.day);
-  final month = _zeroPad(dateTime.month);
-  final year = dateTime.year;
-  return '$day.$month.$year';
-}
-
-String formatTime(TimeOfDay dateTime) {
-  final hour = _zeroPad(dateTime.hour);
-  final minute = _zeroPad(dateTime.minute);
-
-  return '$hour:$minute';
+int getCompletedCountByWeekDay(int weekDay, List<Task> tasks) {
+  var today = DateTime.now();
+  return tasks
+      .where((task) =>
+          task.done &&
+          task.completedOn != null &&
+          task.completedOn!.isAfter(today.subtract(Duration(days: 7))) &&
+          task.completedOn!.weekday == weekDay)
+      .length;
 }
 
 var shoppingCategory =
@@ -116,12 +96,8 @@ List<Task> tasks = [
     deadLine: DateTime.now().add(Duration(days: 365)),
   ),
   Task(
-    description: "купить подарок на 8 марта",
-    deadLine: DateTime(2025, 3, 8, 9, 0, 0),
-    categoryId: shoppingCategory.id
-  ),
-  Task(
-      description: "стать синьором",
-      categoryId: workCategory.id
-  ),
+      description: "купить подарок на 8 марта",
+      deadLine: DateTime(2025, 3, 8, 9, 0, 0),
+      categoryId: shoppingCategory.id),
+  Task(description: "стать синьором", categoryId: workCategory.id),
 ];
