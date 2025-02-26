@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/data.dart';
+import 'package:todo_list/models/task.dart';
+import 'package:todo_list/util.dart';
 
 class TaskRow extends StatelessWidget {
   final Task task;

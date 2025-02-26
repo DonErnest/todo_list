@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/data.dart';
+import 'package:todo_list/models/task.dart';
+import 'package:todo_list/util.dart';
 
 class TaskForm extends StatefulWidget {
   final void Function(Task newTask) onTaskCreated;
