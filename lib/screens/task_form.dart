@@ -111,6 +111,15 @@ class _TaskFormState extends State<TaskForm> {
     }
   }
 
+  void onClearDate() {
+    setState(() {
+      selectedDate = null;
+      selectedTimeOfDay = null;
+      deadLineDateController.text = "";
+      deadLineTimeController.text = "";
+    });
+  }
+
   @override
   void dispose() {
     descriptionController.dispose();
@@ -136,12 +145,12 @@ class _TaskFormState extends State<TaskForm> {
               onChanged: (value) => setState(() => taskDescription = value),
               maxLines: 1,
               decoration: const InputDecoration(
-                label: Text("enter task description"),
+                label: Text("Описание задачи"),
               ),
             ),
             DropdownMenu(
               expandedInsets: EdgeInsets.zero,
-              label: Text("Category"),
+              label: Text("Категория"),
               inputDecorationTheme: theme.inputDecorationTheme,
               dropdownMenuEntries: categories
                   .map(
@@ -166,7 +175,7 @@ class _TaskFormState extends State<TaskForm> {
                     readOnly: true,
                     controller: deadLineDateController,
                     decoration: InputDecoration(
-                      label: Text('Date'),
+                      label: Text('Дата дедлайна'),
                     ),
                   ),
                 ),
@@ -178,16 +187,17 @@ class _TaskFormState extends State<TaskForm> {
                     readOnly: true,
                     controller: deadLineTimeController,
                     decoration: InputDecoration(
-                      label: Text('Time'),
+                      label: Text('Время'),
                     ),
                   ),
                 ),
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(onPressed: onCanceled, child: Text('Cancel')),
-                const Spacer(),
+                TextButton(onPressed: onClearDate, child: Text('Очистить дату')),
                 ElevatedButton(
                   onPressed: onSaved,
                   child: const Text("Save"),
