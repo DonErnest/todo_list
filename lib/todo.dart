@@ -156,7 +156,7 @@ class _TodoListState extends State<TodoList> {
       }
       return a.description.compareTo(b.description);
     });
-    final theme = Theme.of(context);
+
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentScreenIndex,
