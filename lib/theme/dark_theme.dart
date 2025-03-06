@@ -26,10 +26,13 @@ final darkTheme = ThemeData.dark().copyWith(
         foregroundColor: darkColorScheme.primaryContainer,
       ),
     ),
-  extensions: [checkBoxCustomColors]
+    inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(color: Color.fromRGBO(241, 233, 218, 1))
+    ),
+  extensions: [lightCustomColors]
 );
 
-final checkBoxCustomColors = CustomColors(
+final lightCustomColors = CustomColors(
   checkBoxBackground: Color.fromRGBO(217, 3, 104, 1),
   doneCheckBox: Color.fromRGBO(241, 233, 218, 1),
 );

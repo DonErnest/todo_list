@@ -25,6 +25,9 @@ final lightTheme = ThemeData.light().copyWith(
         foregroundColor: lightColorScheme.primaryContainer,
       ),
     ),
+  inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(color: Colors.pink)
+  ),
   extensions: [checkBoxCustomColors],
 );
 

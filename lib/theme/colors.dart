@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class CustomColors extends ThemeExtension<CustomColors> {
   final Color doneCheckBox;
-
   final Color checkBoxBackground;
 
   const CustomColors({

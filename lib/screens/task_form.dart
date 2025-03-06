@@ -144,8 +144,9 @@ class _TaskFormState extends State<TaskForm> {
               controller: descriptionController,
               onChanged: (value) => setState(() => taskDescription = value),
               maxLines: 1,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 label: Text("Описание задачи"),
+                labelStyle: theme.inputDecorationTheme.labelStyle,
               ),
             ),
             DropdownMenu(
@@ -176,6 +177,7 @@ class _TaskFormState extends State<TaskForm> {
                     controller: deadLineDateController,
                     decoration: InputDecoration(
                       label: Text('Дата дедлайна'),
+                      labelStyle: theme.inputDecorationTheme.labelStyle,
                     ),
                   ),
                 ),
@@ -188,6 +190,7 @@ class _TaskFormState extends State<TaskForm> {
                     controller: deadLineTimeController,
                     decoration: InputDecoration(
                       label: Text('Время'),
+                      labelStyle: theme.inputDecorationTheme.labelStyle,
                     ),
                   ),
                 ),

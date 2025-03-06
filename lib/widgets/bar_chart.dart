@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/task.dart';
+import 'package:todo_list/theme/colors.dart';
 import 'package:todo_list/util.dart';
 
 class _BarChart extends StatelessWidget {
@@ -36,6 +37,7 @@ class _BarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customCheckBoxColor = Theme.of(context).extension<CustomColors>()!;
     return BarChart(
       BarChartData(
           barTouchData: barTouchData,
@@ -65,7 +67,7 @@ class _BarChart extends StatelessWidget {
             return BarTooltipItem(
               rod.toY.round().toString(),
               const TextStyle(
-                color: Color.fromRGBO(28, 36, 57, 1),
+                color: Color.fromRGBO(0, 255, 230, 1.0),
                 fontWeight: FontWeight.bold,
               ),
             );
@@ -75,7 +77,7 @@ class _BarChart extends StatelessWidget {
 
   Widget getTitles(double value, TitleMeta meta) {
     final style = TextStyle(
-      color: Color.fromRGBO(28, 36, 57, 1),
+      color: Color.fromRGBO(0, 255, 230, 1.0),
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
@@ -111,14 +113,16 @@ class _BarChart extends StatelessWidget {
         show: false,
       );
 
-  LinearGradient get _barsGradient => LinearGradient(
-        colors: [
-          Color.fromRGBO(37, 124, 195, 1),
-          Color.fromRGBO(77, 222, 252, 1),
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
+  LinearGradient get _barsGradient {
+    return LinearGradient(
+      colors: [
+        Color.fromRGBO(37, 124, 195, 1),
+        Color.fromRGBO(77, 222, 252, 1),
+      ],
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+    );
+  }
 
   List<BarChartGroupData> get barGroups {
     return lastWeek
